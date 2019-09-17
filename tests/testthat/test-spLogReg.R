@@ -167,9 +167,11 @@ if (not_cran) {
           "10 variables with low/no variation have been removed.", fixed = TRUE
         )
         expect_length(mod.bigstatsr7, 6)
-        expect_equal(summary(mod.bigstatsr7)$pf.num, c(3, 3, 1, 1, 2, 2))
+        expect_equal(summary(mod.bigstatsr7)$pf.num, c(1, 2, 3, 1, 2, 3))
+        expect_equal(summary(mod.bigstatsr7, sort = TRUE)$pf.num,
+                     c(3, 3, 1, 1, 2, 2))
         expect_identical(summary(mod.bigstatsr7, best.only = TRUE),
-                         summary(mod.bigstatsr7)[1, ])
+                         summary(mod.bigstatsr7, sort = TRUE)[1, ])
       }
     }
   })
