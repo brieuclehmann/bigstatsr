@@ -1,3 +1,10 @@
+## bigstatsr 0.9.10
+
+In `big_sp***Reg()`, you can now provide multiple vectors of `pf.X` (as columns of a matrix).
+The best vector of penalty factors will be chosen in CMSA (just like with `alphas`).
+
+Note that you are no longer able to use unpenalized variables (i.e. `pf.X` with some 0s). However, you can still put these variables in `covar.train` instead where you can use 0s in `pf.covar`.
+
 ## bigstatsr 0.9.9
 
 In `plot.big_SVD()`,

@@ -129,32 +129,44 @@ if (not_cran) {
                           covar.row = covar[-ind, ])
         cor0 <- cor(preds4, y[-ind])
 
-        pf <- rep(1, ncol(X)); pf[set] <- 10
+        pf0 <- rep(1, ncol(X)); pf1 <- pf0; pf1[set] <- 10
         expect_warning(
           mod.bigstatsr5 <- big_spLinReg(X, y[ind], ind.train = ind,
                                          covar.train = covar[ind, ],
-                                         alphas = alpha, pf.X = pf,
+                                         alphas = alpha, pf.X = pf1,
                                          ncores = test_cores()),
           "10 variables with low/no variation have been removed.", fixed = TRUE
         )
         preds5 <- predict(mod.bigstatsr5, X, ind.row = (1:N)[-ind],
                           covar.row = covar[-ind, ])
 
-        pf[set] <- 0
+        pf2 <- pf0; pf2[set] <- 0.01
         expect_warning(
           mod.bigstatsr6 <- big_spLinReg(X, y[ind], ind.train = ind,
                                          covar.train = covar[ind, ],
-                                         alphas = alpha, pf.X = pf,
+                                         alphas = alpha, pf.X = pf2,
                                          ncores = test_cores()),
           "10 variables with low/no variation have been removed.", fixed = TRUE
         )
-        lapply(unlist(mod.bigstatsr6, recursive = FALSE),
-               function(mod) expect_true(all(mod$beta[set2] != 0)))
+        # lapply(unlist(mod.bigstatsr6, recursive = FALSE),
+        #        function(mod) expect_true(all(mod$beta[set2] != 0)))
         preds6 <- predict(mod.bigstatsr6, X, ind.row = (1:N)[-ind],
                           covar.row = covar[-ind, ])
-
         expect_gt(cor(preds6, y[-ind]), cor0)
         if (any(diff(preds5) != 0)) expect_lt(cor(preds5, y[-ind]), cor0)
+
+        expect_warning(
+          mod.bigstatsr7 <- big_spLinReg(X, y[ind], ind.train = ind,
+                                         covar.train = covar[ind, ],
+                                         alphas = alpha,
+                                         pf.X = cbind(pf0, pf1, pf2),
+                                         ncores = test_cores()),
+          "10 variables with low/no variation have been removed.", fixed = TRUE
+        )
+        expect_length(mod.bigstatsr7, 3)
+        expect_equal(summary(mod.bigstatsr7)$pf.num, c(3, 1, 2))
+        expect_identical(summary(mod.bigstatsr7, best.only = TRUE),
+                         summary(mod.bigstatsr7)[1, ])
       }
     }
   })

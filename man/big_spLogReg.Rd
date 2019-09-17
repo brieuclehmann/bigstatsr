@@ -35,9 +35,11 @@ a model with large-effect variables that you don't want to penalize.}
 If supplied, \code{pf.X} must be a numeric vector of the same length as \code{ind.col}.
 Default is all \code{1}. The purpose of \code{pf.X} is to apply differential
 penalization if some coefficients are thought to be more likely than others
-to be in the model. Setting SOME to 0 allows to have unpenalized coefficients.}
+to be in the model. If you do not want to penalize some variables, you can
+pass them as covariables and set the corresponding \code{pf.covar} to 0.}
 
-\item{pf.covar}{Same as \code{pf.X}, but for \code{covar.train}.}
+\item{pf.covar}{Same as \code{pf.X}, but for \code{covar.train}. Setting SOME to 0
+allows to have unpenalized coefficients.}
 
 \item{alphas}{The elastic-net mixing parameter that controls the relative
 contribution from the lasso (l1) and the ridge (l2) penalty. The penalty is

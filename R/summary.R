@@ -24,6 +24,7 @@ summary.big_sp_list <- function(object, best.only = FALSE, ...) {
   res <- foreach(mods = object, .combine = "rbind") %do% {
     tibble::tibble(
       alpha = mods[[1]]$alpha,
+      pf.num = mods[[1]]$pf.num,
       validation_loss = mean(sapply(mods, function(mod) min(mod$loss.val))),
       intercept = mean(sapply(mods, function(mod) mod$intercept)),
       beta = list(rowMeans(sapply(mods, function(mod) mod$beta))),
@@ -32,7 +33,8 @@ summary.big_sp_list <- function(object, best.only = FALSE, ...) {
     )
   }
 
-  `if`(best.only, res[which.min(res$validation_loss), ], res)
+  `if`(best.only, res[which.min(res$validation_loss), ],
+       res[order(res$validation_loss), ])
 }
 
 ################################################################################

@@ -186,8 +186,10 @@ COPY_biglasso_part <- function(X, y.train, ind.train, ind.col, covar.train,
 #'   If supplied, `pf.X` must be a numeric vector of the same length as `ind.col`.
 #'   Default is all `1`. The purpose of `pf.X` is to apply differential
 #'   penalization if some coefficients are thought to be more likely than others
-#'   to be in the model. Setting SOME to 0 allows to have unpenalized coefficients.
-#' @param pf.covar Same as `pf.X`, but for `covar.train`.
+#'   to be in the model. If you do not want to penalize some variables, you can
+#'   pass them as covariables and set the corresponding `pf.covar` to 0.
+#' @param pf.covar Same as `pf.X`, but for `covar.train`. Setting SOME to 0
+#'   allows to have unpenalized coefficients.
 #'
 #' @keywords internal
 #'
@@ -235,7 +237,8 @@ COPY_biglasso_main <- function(X, y.train, ind.train, ind.col, covar.train,
   p1 <- length(ind.col); p2 <- ncol(covar.train); p <- p1 + p2
   if (is.null(pf.X))     pf.X     <- rep(1, p1)
   if (is.null(pf.covar)) pf.covar <- rep(1, p2)
-  assert_lengths(pf.X,     ind.col)
+  if (!is.matrix(pf.X))  pf.X     <- as.matrix(pf.X)
+  assert_lengths(rows_along(pf.X), ind.col)
   assert_lengths(pf.covar, cols_along(covar.train))
 
   if (any(alphas < 1e-4 | alphas > 1)) stop("alpha must be between 1e-4 and 1.")
@@ -247,23 +250,18 @@ COPY_biglasso_main <- function(X, y.train, ind.train, ind.col, covar.train,
       stop("y.train must numeric or able to be coerced to numeric"))
 
 
-  # variables that are not penalized + base prediction
-  assert_all(c(pf.X, pf.covar) >= 0)
-  ind0.X <- which(pf.X == 0)
+  # covariates that are not penalized + base prediction
+  assert_all(pf.X > 0)
+  assert_all(pf.covar >= 0)
   ind0.covar <- which(pf.covar == 0)
-  var0.train <- cbind(
-    1,
-    X[ind.train, ind.col[ind0.X], drop = FALSE],
-    covar.train[, ind0.covar, drop = FALSE]
-  )
+  var0.train <- cbind(1, covar.train[, ind0.covar, drop = FALSE])
   fit <- null_pred(var0.train, y.train, base.train, family)
   y_diff.train <- y.train - fit$fitted.values
   base.train <- fit$linear.predictors
   beta0 <- fit$coef[1]
   beta.X <- rep(0, p1)
-  beta.X[ind0.X] <- utils::head(fit$coef[-1], length(ind0.X))
   beta.covar <- rep(0, p2)
-  beta.covar[ind0.covar] <- utils::tail(fit$coef, length(ind0.covar))
+  beta.covar[ind0.covar] <- fit$coef[-1]
 
 
   # Get summaries
@@ -281,7 +279,7 @@ COPY_biglasso_main <- function(X, y.train, ind.train, ind.col, covar.train,
     ind.train = ind.train, ind.sets = ind.sets, K = K)
 
   keep <- do.call('c', lapply(list_summaries, function(x) x[["keep"]]))
-  pf.keep <- c(pf.X[keep], pf.covar)
+  pf_all.keep <- apply(pf.X[keep, , drop = FALSE], 2, c, pf.covar)
 
 
   ## fit models
@@ -295,7 +293,9 @@ COPY_biglasso_main <- function(X, y.train, ind.train, ind.col, covar.train,
   }
 
   alphas <- sort(alphas)
-  cross.res <- foreach(alpha = alphas) %:% foreach(ic = 1:K) %dopar% {
+  cross.res <- foreach(alpha = alphas) %:%
+    foreach(ipf = cols_along(pf_all.keep)) %:%
+    foreach(ic = 1:K) %dopar% {
 
     in.val <- (ind.sets == ic)
 
@@ -308,6 +308,7 @@ COPY_biglasso_main <- function(X, y.train, ind.train, ind.col, covar.train,
     scale  <- c(scale,  summaries.covar[["scale"]][ic, ])
     resid  <- c(resid,  summaries.covar[["resid"]][ic, ])
     ## Compute lambdas of the path
+    pf.keep <- pf_all.keep[, ipf]
     lambda.max <- max(abs(resid / pf.keep)[pf.keep != 0]) / alpha
     lambda <- exp(
       seq(log(lambda.max), log(lambda.max * lambda.min.ratio), length.out = nlambda))
@@ -327,6 +328,7 @@ COPY_biglasso_main <- function(X, y.train, ind.train, ind.col, covar.train,
       base.val = base.train[in.val],
       pf.keep
     )
+    res$pf.num <- ipf
     # Add first solution
     res$intercept <- res$intercept + beta0
     res$beta <- res$beta + c(beta.X[keep], beta.covar)
@@ -340,13 +342,13 @@ COPY_biglasso_main <- function(X, y.train, ind.train, ind.col, covar.train,
              "Access remaining columns with 'attr(<object>, \"ind.col\")'.")
 
   structure(
-    cross.res,
+    unlist(cross.res, recursive = FALSE),
     class = "big_sp_list",
     family = family,
     alphas = alphas,
     ind.col = ind.col[keep],
     ind.sets = ind.sets,
-    pf = pf.keep,
+    pf = pf_all.keep,
     base = base.train0
   )
 }
