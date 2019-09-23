@@ -172,6 +172,13 @@ if (not_cran) {
                      c(3, 3, 1, 1, 2, 2))
         expect_identical(summary(mod.bigstatsr7, best.only = TRUE),
                          summary(mod.bigstatsr7, sort = TRUE)[1, ])
+        if (!is.null(covar)) {
+          expect_error(predict(mod.bigstatsr7, X, ind.row = (1:N)[-ind]),
+                       "You forgot to provide 'covar.row' in predict().")
+        }
+        pred <- predict(mod.bigstatsr7, X, ind.row = (1:N)[-ind],
+                        covar = covar[-ind, ])
+        expect_gt(AUC(pred, y[-ind]), 0.8)
       }
     }
   })

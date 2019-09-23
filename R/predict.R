@@ -87,7 +87,7 @@ predict.big_sp_list <- function(object, X,
     assert_lengths(base.row, ind.row)
   }
 
-  covar_used <- (length(attr(object, "pf")) > length(attr(object, "ind.col")))
+  covar_used <- (nrow(attr(object, "pf")) > length(attr(object, "ind.col")))
   if (covar_used && is.null(covar.row))
     stop2("You forgot to provide 'covar.row' in predict().")
 
