@@ -1,6 +1,6 @@
 ################################################################################
 
-#' @importFrom bigassertr printf message2 warning2 stop2
+#' @importFrom bigassertr message2 warning2 stop2
 
 ################################################################################
 
@@ -13,22 +13,9 @@ as_vec <- function(x) {
 
 ################################################################################
 
-#' Temporarily disable downcast warning
-#'
-#' @param expr The expression to evaluate without downcast warning.
-#'
-#' @return The result of the evaluated expression.
+#' @importFrom rmio without_downcast_warning
 #' @export
-#'
-#' @examples
-#' without_downcast_warning(FBM(10, 10, type = "integer", init = 1.5))
-without_downcast_warning <- function(expr) {
-
-  opt.save <- options(bigstatsr.downcast.warning = FALSE)
-  on.exit(options(opt.save), add = TRUE)
-
-  eval.parent(substitute(expr))
-}
+rmio::without_downcast_warning
 
 ################################################################################
 
@@ -36,7 +23,6 @@ without_downcast_warning <- function(expr) {
 #' @importFrom bigassertr assert_int assert_pos assert_all assert_nona
 #' @importFrom bigassertr assert_01 assert_multiple assert_lengths
 #' @importFrom bigassertr assert_class assert_class_or_null
-#' @importFrom bigassertr assert_dir assert_exist assert_noexist
 #' @importFrom bigparallelr assert_cores
 
 ################################################################################
