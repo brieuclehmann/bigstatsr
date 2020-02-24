@@ -13,54 +13,6 @@ boot_auc_sorted_tab <- function(x, y, n_boot) {
     .Call(`_bigstatsr_boot_auc_sorted_tab`, x, y, n_boot)
 }
 
-conv_NA_float <- function(source) {
-    .Call(`_bigstatsr_conv_NA_float`, source)
-}
-
-extractVec <- function(BM, elemInd) {
-    .Call(`_bigstatsr_extractVec`, BM, elemInd)
-}
-
-extractMat <- function(BM, rowInd, colInd) {
-    .Call(`_bigstatsr_extractMat`, BM, rowInd, colInd)
-}
-
-createFile <- function(fileName, nrow, ncol, type) {
-    invisible(.Call(`_bigstatsr_createFile`, fileName, nrow, ncol, type))
-}
-
-addColumns <- function(fileName, nrow, ncol_add, type) {
-    invisible(.Call(`_bigstatsr_addColumns`, fileName, nrow, ncol_add, type))
-}
-
-replaceVecOne <- function(xpbm, elemInd, val) {
-    invisible(.Call(`_bigstatsr_replaceVecOne`, xpbm, elemInd, val))
-}
-
-replaceVec <- function(xpbm, elemInd, vec) {
-    invisible(.Call(`_bigstatsr_replaceVec`, xpbm, elemInd, vec))
-}
-
-replaceMatOne <- function(xpbm, rowInd, colInd, val) {
-    invisible(.Call(`_bigstatsr_replaceMatOne`, xpbm, rowInd, colInd, val))
-}
-
-replaceMat <- function(xpbm, rowInd, colInd, mat) {
-    invisible(.Call(`_bigstatsr_replaceMat`, xpbm, rowInd, colInd, mat))
-}
-
-replaceDF <- function(xpbm, rowInd, colInd, df) {
-    invisible(.Call(`_bigstatsr_replaceDF`, xpbm, rowInd, colInd, df))
-}
-
-getXPtrFBM <- function(path, n, m, type) {
-    .Call(`_bigstatsr_getXPtrFBM`, path, n, m, type)
-}
-
-getXPtrFBM_RW <- function(path, n, m, type) {
-    .Call(`_bigstatsr_getXPtrFBM_RW`, path, n, m, type)
-}
-
 increment_scaled_tcrossprod <- function(K, part_temp, BM, rowInd, colInd, center, scale) {
     invisible(.Call(`_bigstatsr_increment_scaled_tcrossprod`, K, part_temp, BM, rowInd, colInd, center, scale))
 }
@@ -121,36 +73,12 @@ bigcolvars <- function(BM, rowInd, colInd) {
     .Call(`_bigstatsr_bigcolvars`, BM, rowInd, colInd)
 }
 
-mycount1 <- function(BM, rowInd, colInd, codeInd) {
-    .Call(`_bigstatsr_mycount1`, BM, rowInd, colInd, codeInd)
-}
-
-mycount2 <- function(BM, rowInd, colInd, codeInd) {
-    .Call(`_bigstatsr_mycount2`, BM, rowInd, colInd, codeInd)
-}
-
-GET_ERROR_TYPE <- function() {
-    .Call(`_bigstatsr_GET_ERROR_TYPE`)
-}
-
-GET_ERROR_DIM <- function() {
-    .Call(`_bigstatsr_GET_ERROR_DIM`)
-}
-
-GET_ERROR_BOUNDS <- function() {
-    .Call(`_bigstatsr_GET_ERROR_BOUNDS`)
-}
-
 pMatVec4 <- function(BM, x, rowInd, colInd) {
     .Call(`_bigstatsr_pMatVec4`, BM, x, rowInd, colInd)
 }
 
 cpMatVec4 <- function(BM, x, rowInd, colInd) {
     .Call(`_bigstatsr_cpMatVec4`, BM, x, rowInd, colInd)
-}
-
-transpose3 <- function(BM, BM2) {
-    invisible(.Call(`_bigstatsr_transpose3`, BM, BM2))
 }
 
 univLinReg5 <- function(BM, covar_U, y, rowInd, colInd) {
@@ -161,16 +89,12 @@ IRLS <- function(BM, covar, y, z0, w0, rowInd, colInd, tol, maxiter) {
     .Call(`_bigstatsr_IRLS`, BM, covar, y, z0, w0, rowInd, colInd, tol, maxiter)
 }
 
+GET_ERROR_DIM <- function() {
+    .Call(`_bigstatsr_GET_ERROR_DIM`)
+}
+
 centering <- function(source, mean) {
     .Call(`_bigstatsr_centering`, source, mean)
-}
-
-incr_FBM_mat <- function(BM, mat) {
-    invisible(.Call(`_bigstatsr_incr_FBM_mat`, BM, mat))
-}
-
-incr_FBM_vec <- function(BM, vec) {
-    invisible(.Call(`_bigstatsr_incr_FBM_vec`, BM, vec))
 }
 
 scaleK <- function(BM, sums, mu, delta, nrow) {
