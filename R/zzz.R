@@ -11,6 +11,9 @@
 
   toset <- !(names(pkg.opt) %in% names(.Options))
   if (any(toset)) options(pkg.opt[toset])
+
+  # To be able to use methods 'diag' and 'typeof' for FBMs
+  try(attachNamespace("rmio"), silent = TRUE)
 }
 
 ################################################################################
