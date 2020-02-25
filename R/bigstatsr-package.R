@@ -2,6 +2,8 @@
 
 #' @useDynLib bigstatsr, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
+#' @importFrom bigparallelr register_parallel
+#' @importFrom methods setMethod
 #' @import foreach
 #'
 #' @param X A [FBM][FBM-class].

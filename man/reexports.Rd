@@ -37,6 +37,6 @@ below to see their documentation.
 
   \item{cowplot}{\code{\link[cowplot]{plot_grid}}}
 
-  \item{rmio}{\code{\link[rmio]{FBM}}, \code{\link[rmio]{FBM.code256}}, \code{\link[rmio]{add_code256}}, \code{\link[rmio]{as_FBM}}, \code{\link[rmio]{big_apply}}, \code{\link[rmio]{big_attach}}, \code{\link[rmio]{big_attachExtdata}}, \code{\link[rmio]{big_copy}}, \code{\link[rmio]{big_counts}}, \code{\link[rmio]{big_increment}}, \code{\link[rmio]{big_parallelize}}, \code{\link[rmio]{big_read}}, \code{\link[rmio]{big_transpose}}, \code{\link[rmio]{big_write}}, \code{\link[rmio]{block_size}}, \code{\link[rmio]{sub_bk}}, \code{\link[rmio]{without_downcast_warning}}}
+  \item{rmio}{\code{\link[rmio]{add_code256}}, \code{\link[rmio]{as_FBM}}, \code{\link[rmio]{big_apply}}, \code{\link[rmio]{big_attach}}, \code{\link[rmio]{big_attachExtdata}}, \code{\link[rmio]{big_copy}}, \code{\link[rmio]{big_counts}}, \code{\link[rmio]{big_increment}}, \code{\link[rmio]{big_parallelize}}, \code{\link[rmio]{big_read}}, \code{\link[rmio]{big_transpose}}, \code{\link[rmio]{big_write}}, \code{\link[rmio]{block_size}}, \code{\link[rmio]{FBM}}, \code{\link[rmio]{FBM.code256}}, \code{\link[rmio]{sub_bk}}, \code{\link[rmio]{without_downcast_warning}}}
 }}
 
