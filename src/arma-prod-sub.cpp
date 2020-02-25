@@ -1,5 +1,7 @@
 /******************************************************************************/
 
+// #define STRICT_R_HEADERS
+#include <RcppArmadillo.h>
 #include <bigstatsr/BMAcc-dispatcher.h>
 
 /******************************************************************************/
@@ -23,11 +25,11 @@ arma::mat& extract_submat(C macc,
 /******************************************************************************/
 
 template <class C>
-arma::mat prod_FBM_block_mat(C macc,
-                             const arma::mat& Y,
-                             const IntegerVector& rowInd,
-                             const IntegerVector& colInd,
-                             int max_size) {
+arma::mat _prod_FBM_block_mat(C macc,
+                              const arma::mat& Y,
+                              const IntegerVector& rowInd,
+                              const IntegerVector& colInd,
+                              int max_size) {
 
   int n = rowInd.size();
   int m = colInd.size();
@@ -59,7 +61,7 @@ arma::mat prod_FBM_block_mat(C macc,
 /******************************************************************************/
 
 #define CALL_PROD_BLOCK(ACC) {                                                 \
-  return prod_FBM_block_mat(ACC, Y, rowInd, colInd, max_size);                 \
+  return _prod_FBM_block_mat(ACC, Y, rowInd, colInd, max_size);                \
 }
 
 // Dispatch function for prod_FBM_block_mat
@@ -76,11 +78,11 @@ arma::mat prod_FBM_block_mat(Environment BM,
 /******************************************************************************/
 
 template <class C>
-arma::mat cprod_FBM_block_mat(C macc,
-                              const arma::mat& Y,
-                              const IntegerVector& rowInd,
-                              const IntegerVector& colInd,
-                              int max_size) {
+arma::mat _cprod_FBM_block_mat(C macc,
+                               const arma::mat& Y,
+                               const IntegerVector& rowInd,
+                               const IntegerVector& colInd,
+                               int max_size) {
 
   int n = rowInd.size();
   int m = colInd.size();
@@ -114,7 +116,7 @@ arma::mat cprod_FBM_block_mat(C macc,
 /******************************************************************************/
 
 #define CALL_CPROD_BLOCK(ACC) {                                                \
-  return cprod_FBM_block_mat(ACC, Y, rowInd, colInd, max_size);                \
+  return _cprod_FBM_block_mat(ACC, Y, rowInd, colInd, max_size);               \
 }
 
 // Dispatch function for prod_FBM_block_mat

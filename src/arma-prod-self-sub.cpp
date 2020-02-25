@@ -1,6 +1,19 @@
 /******************************************************************************/
 
+// #define STRICT_R_HEADERS
+#include <RcppArmadillo.h>
 #include <bigstatsr/BMAcc-dispatcher.h>
+
+/******************************************************************************/
+
+inline arma::mat FBM_RW2arma(Rcpp::Environment BM) {
+
+  Rcpp::XPtr<FBM_RW> xpBM = BM["address_rw"];
+  myassert(xpBM->matrix_type() == 8,
+           "Mapping to arma::mat is available for 'double' FBMs only.");
+
+  return arma::mat((double*)xpBM->matrix(), xpBM->nrow(), xpBM->ncol(), false);
+}
 
 /******************************************************************************/
 
@@ -35,13 +48,13 @@ arma::mat& _extract_scaled_submat(C macc,
 /******************************************************************************/
 
 template <class C>
-void increment_scaled_tcrossprod(arma::mat& K,
-                                 arma::mat& part_temp,
-                                 C macc,
-                                 const IntegerVector& rowInd,
-                                 const IntegerVector& colInd,
-                                 const NumericVector& center,
-                                 const NumericVector& scale) {
+void _increment_scaled_tcrossprod(arma::mat& K,
+                                  arma::mat& part_temp,
+                                  C macc,
+                                  const IntegerVector& rowInd,
+                                  const IntegerVector& colInd,
+                                  const NumericVector& center,
+                                  const NumericVector& scale) {
 
   part_temp = _extract_scaled_submat(macc, part_temp, rowInd, colInd, center, scale);
   K += part_temp * part_temp.t();
@@ -50,8 +63,8 @@ void increment_scaled_tcrossprod(arma::mat& K,
 /******************************************************************************/
 
 #define CALL_INCR_TCPROD(ACC) {                                                \
-  return increment_scaled_tcrossprod(armaK, part_temp, ACC,                    \
-                                     rowInd, colInd, center, scale);           \
+  return _increment_scaled_tcrossprod(armaK, part_temp, ACC,                   \
+                                      rowInd, colInd, center, scale);          \
 }
 
 // Dispatch function for prod_FBM_block_mat

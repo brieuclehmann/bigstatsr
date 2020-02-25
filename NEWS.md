@@ -1,3 +1,7 @@
+## bigstatsr 1.3.0
+
+- Move FBM classes and related utility functions to package {rmio} so that they can be used more easily and with fewer dependencies.
+
 ## bigstatsr 1.2.0
 
 - Functions `big_(c)prodMat()` and `big_(t)crossprodSelf()` now use much less memory, and may be faster.
