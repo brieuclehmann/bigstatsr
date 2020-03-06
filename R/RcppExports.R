@@ -117,8 +117,8 @@ bigsummaries <- function(BM, row_idx, col_idx, covar, y, which_set, K) {
     .Call(`_bigstatsr_bigsummaries`, BM, row_idx, col_idx, covar, y, which_set, K)
 }
 
-bigcolvars <- function(BM, rowInd, colInd) {
-    .Call(`_bigstatsr_bigcolvars`, BM, rowInd, colInd)
+bigcolvars <- function(BM, rowInd, colInd, ncores) {
+    .Call(`_bigstatsr_bigcolvars`, BM, rowInd, colInd, ncores)
 }
 
 mycount1 <- function(BM, rowInd, colInd, codeInd) {
@@ -141,12 +141,12 @@ GET_ERROR_BOUNDS <- function() {
     .Call(`_bigstatsr_GET_ERROR_BOUNDS`)
 }
 
-pMatVec4 <- function(BM, x, rowInd, colInd) {
-    .Call(`_bigstatsr_pMatVec4`, BM, x, rowInd, colInd)
+pMatVec4 <- function(BM, x, rowInd, colInd, ncores = 1L) {
+    .Call(`_bigstatsr_pMatVec4`, BM, x, rowInd, colInd, ncores)
 }
 
-cpMatVec4 <- function(BM, x, rowInd, colInd) {
-    .Call(`_bigstatsr_cpMatVec4`, BM, x, rowInd, colInd)
+cpMatVec4 <- function(BM, x, rowInd, colInd, ncores = 1L) {
+    .Call(`_bigstatsr_cpMatVec4`, BM, x, rowInd, colInd, ncores)
 }
 
 transpose3 <- function(BM, BM2) {

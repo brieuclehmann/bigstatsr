@@ -35,7 +35,8 @@ big_prodVec <- function(X, y.col,
                         ind.row = rows_along(X),
                         ind.col = cols_along(X),
                         center = NULL,
-                        scale = NULL) {
+                        scale = NULL,
+                        ncores = 1) {
 
   check_args()
   assert_lengths(y.col, ind.col)
@@ -49,7 +50,7 @@ big_prodVec <- function(X, y.col,
     center2 <- drop(crossprod(as_vec(center), y.col))
   }
 
-  res <- pMatVec4(X, y.col, ind.row, ind.col)
+  res <- pMatVec4(X, y.col, ind.row, ind.col, ncores)
 
   `if`(is.null(center), res, res - center2)
 }
@@ -91,7 +92,8 @@ big_cprodVec <- function(X, y.row,
                          ind.row = rows_along(X),
                          ind.col = cols_along(X),
                          center = NULL,
-                         scale = NULL) {
+                         scale = NULL,
+                         ncores = 1) {
 
   check_args()
   assert_lengths(y.row, ind.row)
@@ -105,7 +107,7 @@ big_cprodVec <- function(X, y.row,
     center2 <- sum(y.row) * as_vec(center)
   }
 
-  res <- cpMatVec4(X, y.row, ind.row, ind.col)
+  res <- cpMatVec4(X, y.row, ind.row, ind.col, ncores)
 
   if (!is.null(center)) res <- res - center2
   if (!is.null(scale))  res <- res / scale
